@@ -13,13 +13,14 @@ namespace FolderSerialization.BL.Services
         {
             _binaryFormatter = new BinaryFormatter();
         }
+        public static string FileFormat => "xax";
         public async Task SerializeAsync(Folder folder, string path)
         {
             await Task.Run(() => Serialize(folder, path));
         }
         public void Serialize(Folder folder, string path)
         {
-            using (var stream = new FileStream(Path.Combine(path, folder.Name + ".dat"), FileMode.OpenOrCreate))
+            using (var stream = new FileStream(Path.Combine(path, folder.Name + "." + FileFormat), FileMode.OpenOrCreate))
             {
                 _binaryFormatter.Serialize(stream, folder);
             }
@@ -32,8 +33,6 @@ namespace FolderSerialization.BL.Services
         {
             if (!System.IO.File.Exists(filePath))
                 throw new FileNotFoundException($"File {filePath} doesn't exist.");
-            if (Directory.Exists(deserializedFolderPath))
-                throw new Exception($"Directory {deserializedFolderPath} already exists.");
 
             Folder folder;
 

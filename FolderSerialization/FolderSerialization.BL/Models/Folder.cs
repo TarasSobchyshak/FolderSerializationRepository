@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FolderSerialization.BL.Models
 {
@@ -12,9 +13,16 @@ namespace FolderSerialization.BL.Models
         public string FullPath { get; private set; }
         public List<File> Files { get; private set; }
         public List<Folder> SubFolders { get; private set; }
-
         private DirectoryInfo directoryInfo;
-
+        public Folder()
+        {
+            Files = new List<File>();
+            SubFolders = new List<Folder>();
+        }
+        public async Task LoadFilesAndDirectoriesAsync(string folderPath)
+        {
+            await Task.Run(() => LoadFilesAndDirectories(folderPath));
+        }
         public void LoadFilesAndDirectories(string folderPath)
         {
             if (!Directory.Exists(folderPath))
